@@ -1,0 +1,251 @@
+-----INGREDIENT TEST-----
+
+###Get paged ingredients
+GET http://localhost:8080/api/ingredients
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/api/ingredients?page=0
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/api/ingredients?page=0&size=2
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Get ingredient
+GET http://localhost:8080/api/ingredients/Cheese
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Get ingredient doesn't exist
+GET http://localhost:8080/api/ingredients/Milk
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 404, "Response status is not 404");
+});
+%}
+
+### Get pizzas with Cheese ingredient
+GET http://localhost:8080/api/ingredients/Cheese/pizzas
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Get spicy ingredients
+GET http://localhost:8080/api/ingredients?spicy=true
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Origano",
+  "spicy": true,
+  "amount": 15.03,
+  "veggie": false
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+### Spicy Ingredients Limit
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Mushrooms",
+  "spicy": true,
+  "amount": 15.03,
+  "veggie": false
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+### Ingredient Already Exists
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+  "name": "Origano",
+  "spicy": false,
+  "amount": 15.03,
+  "veggie": false
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+### Update ingredient
+PATCH http://localhost:8080/api/ingredients/Origano
+Content-Type: application/json
+
+{
+  "name": "Origano",
+  "spicy": true,
+  "amount": 16.03,
+  "veggie": false
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### delete ingredient
+DELETE http://localhost:8080/api/ingredients/Origano
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+-----PIZZA TEST-----
+
+###Get all pizzas
+GET http://localhost:8080/api/pizzas
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+###Get all pizzas with less than 2 total ingredients
+GET http://localhost:8080/api/pizzas?totalIngredients=2
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###Get pizza
+GET http://localhost:8080/api/pizzas/Margarita
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###Get same ingredients of 2 pizzas
+GET http://localhost:8080/api/pizzas/compare?pizza1=Margarita&pizza2=Kapriciosa
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### create new pizza
+POST http://localhost:8080/api/pizzas
+Content-Type: application/json
+
+{
+  "name": "Napolitana",
+  "description": "Delicious",
+  "veggie": true,
+  "ingredients": [
+    "Ketchup",
+    "Salami"
+  ]
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+### update pizza
+PUT http://localhost:8080/api/pizzas/Napolitana
+Content-Type: application/json
+
+{
+  "name": "Napolitana2",
+  "description": "Delicious!!",
+  "veggie": false,
+  "ingredients": [
+    "Salami"
+  ]
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### update pizza set veggie true of non-veggie pizza
+PUT http://localhost:8080/api/pizzas/Napolitana2
+Content-Type: application/json
+
+{
+  "name": "Napolitana2",
+  "description": "Delicious!!",
+  "veggie": true,
+  "ingredients": [
+    "Salami"
+  ]
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+###
+DELETE http://localhost:8080/api/pizzas/Napolitana2
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
