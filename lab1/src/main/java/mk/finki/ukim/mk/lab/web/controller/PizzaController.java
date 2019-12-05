@@ -21,7 +21,7 @@ public class PizzaController {
     }
 
     @GetMapping
-    public List<Pizza> getPizzas(@RequestParam(value = "totalIngredients", required = false) Integer totalIngredients) {
+    public List<Pizza> getPizzas(@RequestParam(value = "totalIngredients", required = false) Long totalIngredients) {
         return totalIngredients == null ? this.service.getPizzas() : this.service.getPizzasWithLessTotalIngredients(totalIngredients);
     }
 
@@ -50,5 +50,10 @@ public class PizzaController {
     public List<Ingredient> getSameIngredients(@RequestParam("pizza1") String pizza1,
                                                @RequestParam("pizza2") String pizza2) {
         return this.service.getSameIngredients(pizza1, pizza2);
+    }
+
+    @GetMapping("/spicy_ingredient")
+    public List<Pizza> getWithSpicyIngredient() {
+        return this.service.findAllWithSpicyIngredient();
     }
 }

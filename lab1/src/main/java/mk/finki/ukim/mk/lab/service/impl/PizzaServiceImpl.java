@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PizzaServiceImpl implements PizzaService {
@@ -82,20 +81,17 @@ public class PizzaServiceImpl implements PizzaService {
     }
 
     @Override
-    public List<Pizza> getPizzasWithLessTotalIngredients(Integer totalIngredients) {
-        return this.repository.findAll()
-                .stream()
-                .filter(pizza -> pizza.getIngredients().size() < totalIngredients)
-                .collect(Collectors.toList());
+    public List<Pizza> getPizzasWithLessTotalIngredients(Long totalIngredients) {
+        return this.repository.findAllByTotalIngredients(totalIngredients);
     }
 
     @Override
     public List<Ingredient> getSameIngredients(String name1, String name2) {
-        Pizza pizza1 = this.findPizzaByName(name1);
-        Pizza pizza2 = this.findPizzaByName(name2);
-        return pizza1.getIngredients()
-                .stream()
-                .filter(ingredient -> pizza2.getIngredients().contains(ingredient))
-                .collect(Collectors.toList());
+        return repository.findAllSameIngredients(name1, name2);
+    }
+
+    @Override
+    public List<Pizza> findAllWithSpicyIngredient() {
+        return this.repository.findDistinctByIngredients_SpicyIsTrue();
     }
 }

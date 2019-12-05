@@ -18,7 +18,9 @@ public interface PizzaService {
 
     Pizza findPizzaByName(String name);
 
-    List<Pizza> getPizzasWithLessTotalIngredients(Integer totalIngredients);
+    List<Pizza> getPizzasWithLessTotalIngredients(Long totalIngredients);
 
     List<Ingredient> getSameIngredients(String pizza1, String pizza2);
+
+    List<Pizza> findAllWithSpicyIngredient();
 }

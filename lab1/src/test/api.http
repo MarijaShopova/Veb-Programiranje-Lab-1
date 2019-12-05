@@ -153,7 +153,6 @@ client.test("Request executed successfully", function() {
 });
 %}
 
-###
 ###Get all pizzas with less than 2 total ingredients
 GET http://localhost:8080/api/pizzas?totalIngredients=2
 
@@ -173,7 +172,7 @@ client.test("Request executed successfully", function() {
 %}
 
 ###Get same ingredients of 2 pizzas
-GET http://localhost:8080/api/pizzas/compare?pizza1=Margarita&pizza2=Kapriciosa
+GET http://localhost:8080/api/pizzas/compare?pizza1=Margarita&pizza2=Kapriciosa2
 
 > {%
 client.test("Request executed successfully", function() {
@@ -240,7 +239,16 @@ client.test("Request executed successfully", function() {
 %}
 
 ###
-DELETE http://localhost:8080/api/pizzas/Napolitana2
+DELETE http://localhost:8080/api/pizzas/Kapriciosa
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###Get all pizzas with at least one spicy ingredient
+GET http://localhost:8080/api/pizzas/spicy_ingredient
 
 > {%
 client.test("Request executed successfully", function() {
